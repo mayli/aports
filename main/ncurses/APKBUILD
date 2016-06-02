@@ -38,6 +38,7 @@ build() {
 		--enable-pc-files \
 		--with-shared \
 		--enable-widec \
+		--with-static \
 		|| return 1
 	make || return 1
 }

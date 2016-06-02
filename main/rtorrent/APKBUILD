@@ -8,14 +8,29 @@ pkgdesc="Ncurses BitTorrent client based on libTorrent"
 url="http://rakshasa.github.io/rtorrent/"
 license="GPL"
 arch="all"
-makedepends="libsigc++-dev libtorrent-dev curl-dev xmlrpc-c-dev ncurses-dev"
+makedepends="libsigc++-dev libtorrent-dev curl curl-dev xmlrpc-c xmlrpc-c-dev ncurses-static ncurses-dev zlib-dev openssl-dev libssh2-dev libtool"
 subpackages="$pkgname-doc"
-source="http://rtorrent.net/downloads/${pkgname}-${pkgver}.tar.gz"
+source="http://rtorrent.net/downloads/${pkgname}-${pkgver}.tar.gz
+	static-build.patch"
+
+prepare() {
+	cd "$srcdir/$pkgname-$pkgver"
+	for i in $source; do
+		case $i in
+		*.patch) msg $i; patch -p1 -i "$srcdir"/$i || return 1
+		esac
+	done
+}
 
 _builddir="$srcdir/$pkgname-$pkgver"
 build() {
 	cd "$_builddir"
+	sed -i '/CPPUNIT/d' ./configure.ac
+	./autogen.sh || return 1
 	./configure \
+		LDFLAGS="-static" \
+		--enable-static \
+		--disable-shared \
 		--build=$CBUILD \
 		--host=$CHOST \
 		--prefix=/usr \
@@ -26,7 +41,7 @@ build() {
 		--disable-debug \
 		--with-xmlrpc-c \
 		|| return 1
-	make || return 1
+	make LDFLAGS="-all-static" || return 1
 }
 
 package() {
@@ -35,6 +50,9 @@ package() {
 	install -Dm644 doc/rtorrent.rc "$pkgdir"/usr/share/doc/rtorrent/rtorrent.rc
 }
 
-md5sums="5e7550f74e382a6245412c615f45444d  rtorrent-0.9.6.tar.gz"
-sha256sums="1e69c24f1f26f8f07d58d673480dc392bfc4317818c1115265b08a7813ff5b0e  rtorrent-0.9.6.tar.gz"
-sha512sums="704f7b79d5bc78b817da21a6886662a5a97fde210a110c50f708bdc18e1dcf3ef5c5f4e2740261d41221cfc69c19926bf34e10057adf10601da9e6e06b2cef75  rtorrent-0.9.6.tar.gz"
+md5sums="5e7550f74e382a6245412c615f45444d  rtorrent-0.9.6.tar.gz
+980cd32704ce369fb7e03f5bb8ab14f2  static-build.patch"
+sha256sums="1e69c24f1f26f8f07d58d673480dc392bfc4317818c1115265b08a7813ff5b0e  rtorrent-0.9.6.tar.gz
+59058433329ded68a6036b9dc5a8476f35153c1125be115e12e394f5abb6937e  static-build.patch"
+sha512sums="704f7b79d5bc78b817da21a6886662a5a97fde210a110c50f708bdc18e1dcf3ef5c5f4e2740261d41221cfc69c19926bf34e10057adf10601da9e6e06b2cef75  rtorrent-0.9.6.tar.gz
+c3a789001520028c0fcfa54e41413191a5317410a80dd69019ed8d3ba84657951c6478bbdac0381b42cfc98d6138db581fdb27c70e2cf2cc139eeb9ce262084c  static-build.patch"

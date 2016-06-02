@@ -1,0 +1,21 @@
+--- ./configure.ac.orig
++++ ./configure.ac
+@@ -49,6 +49,18 @@
+ 	          CXXFLAGS="$CXXFLAGS $libtorrent_CFLAGS";
+ 		  LIBS="$LIBS $libtorrent_LIBS")
+
++PKG_CHECK_MODULES([libssh2], libssh2 >= 0.13.6,
++	          CXXFLAGS="$CXXFLAGS $libssh2_CFLAGS";
++		  LIBS="$LIBS $libssh2_LIBS")
++
++PKG_CHECK_MODULES([libssl], libssl >= 0.13.6,
++	          CXXFLAGS="$CXXFLAGS $libssl_CFLAGS";
++		  LIBS="$LIBS $libssl_LIBS")
++
++PKG_CHECK_MODULES([libcrypto], libcrypto >= 0.13.6,
++	          CXXFLAGS="$CXXFLAGS $libcrypto_CFLAGS";
++		  LIBS="$LIBS $libcrypto_LIBS")
++
+ AC_LANG_PUSH(C++)
+ TORRENT_WITH_XMLRPC_C
+ AC_LANG_POP(C++)

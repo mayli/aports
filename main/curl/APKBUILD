@@ -34,7 +34,8 @@ build() {
 		--enable-ipv6 \
 		--enable-unix-sockets \
 		--without-libidn \
-		--disable-static \
+		--disable-shared \
+		--enable-static \
 		--disable-ldap \
 		--with-pic \
 		|| return 1

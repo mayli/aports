@@ -28,6 +28,8 @@ build() {
 		--prefix=/usr \
 		--disable-debug \
 		--disable-instrumentation \
+		--disable-shared \
+		--enable-static \
 		|| return 1
 	make || return 1
 }

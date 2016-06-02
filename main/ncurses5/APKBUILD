@@ -36,7 +36,7 @@ build() {
 		--with-terminfo-dirs=/etc/terminfo:/usr/share/terminfo
 		--disable-pc-files
 		--with-shared
-		--without-static
+		--with-static
 		--without-progs"
 	cd "$_builddir"
 

@@ -38,6 +38,7 @@ build() {
 		--disable-cgi-server \
 		--disable-libwww-client \
 		--disable-wininet-client \
+		--enable-static \
 		|| return 1
 	# no parallel builds :-(
 	make -C include && \
